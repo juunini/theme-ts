@@ -3,10 +3,10 @@
 caching to localStorage
 
 ```typescript
-import Theme from './theme';
+import * as theme from './theme';
 
 // init theme
-let theme = new Theme();
+theme.init();
 
 if (theme.current === 'dark')
   // do dark theme action
