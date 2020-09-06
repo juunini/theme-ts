@@ -1,49 +1,23 @@
-class Theme {
-    private _current: string = 'light';
+const getCachingTheme = () => localStorage.getItem("theme");
+const isDarkTheme = () =>
+  window.matchMedia &&
+  window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-    get current(): string {
-        return this._current;
-    }
+export let current = getCachingTheme();
+if (!current) current = isDarkTheme() ? "dark" : "light";
 
-    constructor() {
-        let cachingTheme = this.getCachingTheme();
-
-        if (!cachingTheme) {
-            if (this.isDarkTheme())
-                this._current = 'dark';
-            else
-                this._current = 'light';
-        } else {
-            this._current = cachingTheme;
-        }
-
-        if (this._current === 'light')
-            this.setLightTheme();
-        else
-            this.setDarkTheme();
-    }
-
-    setDarkTheme() {
-        document.body.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
-        this._current = 'dark';
-    }
-
-    setLightTheme() {
-        document.body.classList.remove('dark');
-        localStorage.setItem('theme', 'light');
-        this._current = 'light';
-    }
-
-    private getCachingTheme = () =>
-        localStorage.getItem('theme');
-
-    private isDarkTheme = () => (
-        window.matchMedia &&
-        window.matchMedia(
-            '(prefers-color-scheme: dark)'
-        ).matches
-    );
+export function init() {
+  current === "dark" ? setDarkTheme() : setLightTheme();
 }
 
-export default Theme;
+export function setDarkTheme() {
+  document.body.classList.add("dark");
+  localStorage.setItem("theme", "dark");
+  current = "dark";
+}
+
+export function setLightTheme() {
+  document.body.classList.remove("dark");
+  localStorage.setItem("theme", "light");
+  current = "light";
+}
